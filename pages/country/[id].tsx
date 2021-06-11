@@ -1,8 +1,8 @@
 import axios from "axios";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { FC } from "react";
-import { useQuery } from "react-query";
-import { Country } from "../../interfaces";
+import { Country, REQ_STATUS } from "../../interfaces";
+import { useNews } from "../../queries/hooks";
 
 interface Props {
   countryData: Country;
@@ -15,7 +15,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   let paths = countries.map((country) => ({
     params: { id: country.alpha3Code },
-  }))
+  }));
 
   return {
     paths,
@@ -39,14 +39,37 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
 };
 
 const CountryDetails: FC<Props> = ({ countryData }) => {
-   const fetched = useQuery('test', )
+  const { data, status, error } = useNews(countryData.alpha2Code);
 
   return (
     <>
       <h1>{countryData.name}</h1>
-      <div>{countryData.region}</div>
-      <div>{countryData.capital}</div>
-      <div></div>
+      <div>Region: {countryData.region}</div>
+      <div>Subregion {countryData.subregion}</div>
+      <div>Capital {countryData.capital}</div>
+      <div>Population {countryData.population}</div>
+      <div>
+        {(() => {
+          switch (status) {
+            case REQ_STATUS.LOADING:
+              return <div>Loading news...</div>;
+            case REQ_STATUS.ERROR:
+              return <div>Error: {error}</div>;
+            default:
+              return (
+                <div>
+                  {data.articles.map((article, index) => (
+                    <div style={{padding: 10}} key={index}>
+                      <h4>Source: {article.source.name}</h4>
+                      <h3>{article.title}</h3>
+                      <p>{article.content}</p>
+                    </div>
+                  ))}
+                </div>
+              );
+          }
+        })()}
+      </div>
     </>
   );
 };
