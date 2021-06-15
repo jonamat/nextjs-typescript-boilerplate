@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Index page matches the snapshot 1`] = `
+<div
+  className="css-h74a88"
+>
+  <div
+    className="css-1878w0a"
+  >
+    <h2
+      className="chakra-heading css-1r2f04i"
+    >
+      NextJS boilerplate
+    </h2>
+    <button
+      className="chakra-button css-1xx8uq7"
+      onClick={[Function]}
+      onMouseEnter={[Function]}
+      type="button"
+    >
+      Go to countries page
+    </button>
+  </div>
+</div>
+`;
